@@ -30,7 +30,7 @@ func GenerateJWT(id int, email string, userType database.UserType) (string, erro
 	return tokenString, nil
 }
 
-func ValidateJWT(tokenString string) (int, string, database.UserType, error) {
+func ValidateJWT(tokenString string) (int, string, string, error) {
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
 		return 0, "", "", errors.New("JWT secret not found in environment variables")
@@ -56,7 +56,7 @@ func ValidateJWT(tokenString string) (int, string, database.UserType, error) {
 
 		id, _ := claims["id"].(int)
 		email, _ := claims["email"].(string)
-		userType, _ := claims["userType"].(database.UserType)
+		userType, _ := claims["userType"].(string)
 
 		return id, email, userType, nil
 	}

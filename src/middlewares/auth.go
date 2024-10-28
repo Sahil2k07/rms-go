@@ -5,14 +5,13 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Sahil2k07/rms-go/src/database"
 	"github.com/Sahil2k07/rms-go/src/utils"
 )
 
 type UserAuthDetails struct {
 	Id       int
 	Email    string
-	UserType database.UserType
+	UserType string
 }
 
 var UserContext = &struct{}{}

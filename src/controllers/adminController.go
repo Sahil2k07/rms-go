@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Sahil2k07/rms-go/src/services"
+	"github.com/Sahil2k07/rms-go/src/utils"
 )
 
 type AdminController struct {
@@ -15,7 +16,10 @@ func NewAdminController(service *services.AdminService) *AdminController {
 }
 
 func (ac *AdminController) CreateJob(w http.ResponseWriter, r *http.Request) {
-
+	if r.Method != http.MethodPost {
+		utils.WrongMethod(w)
+		return
+	}
 }
 
 func (ac *AdminController) JobDetails(w http.ResponseWriter, r *http.Request) {
