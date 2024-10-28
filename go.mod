@@ -4,8 +4,10 @@ go 1.23.1
 
 require (
 	github.com/go-sql-driver/mysql v1.8.1
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/gorilla/handlers v1.5.2
 	github.com/joho/godotenv v1.5.1
+	golang.org/x/crypto v0.28.0
 )
 
 require (

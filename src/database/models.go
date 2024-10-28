@@ -2,13 +2,20 @@ package database
 
 import "time"
 
+type UserType string
+
+const (
+	Admin     UserType = "Admin"
+	Applicant UserType = "Applicant"
+)
+
 type User struct {
-	ID              *int   `json:"id" db:"id"`
-	Email           string `json:"email" db:"email"`
-	Address         string `json:"address" db:"address"`
-	UserType        string `json:"userType" db:"userType"`
-	Password        string `json:"password" db:"password"`
-	ProfileHeadline string `json:"profileHeadline" db:"profileHeadline"`
+	ID              *int     `json:"id" db:"id"`
+	Email           string   `json:"email" db:"email"`
+	Address         string   `json:"address" db:"address"`
+	UserType        UserType `json:"userType" db:"userType"`
+	Password        string   `json:"password" db:"password"`
+	ProfileHeadline string   `json:"profileHeadline" db:"profileHeadline"`
 }
 
 type Profile struct {
