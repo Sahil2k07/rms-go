@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/Sahil2k07/rms-go/src/dto"
 	"github.com/Sahil2k07/rms-go/src/middlewares"
@@ -46,8 +46,6 @@ func (ac *AdminController) CreateJob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(user.Id)
-
 	id, err := ac.service.CreateJobPost(
 		user.Id,
 		createJobData.Title,
@@ -77,13 +75,100 @@ func (ac *AdminController) CreateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ac *AdminController) JobDetails(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.WrongMethod(w)
+		return
+	}
 
+	jobIdStr := r.PathValue("job_id")
+	if jobIdStr == "" {
+		utils.InvalidInput(w, "job_id missing")
+		return
+	}
+
+	jobId, err := strconv.Atoi(jobIdStr)
+	if err != nil {
+		utils.InvalidInput(w, "invalid applicant_id format")
+		return
+	}
+
+	data, err := ac.service.JobData(jobId)
+	if err != nil {
+		utils.InternalServerError(w, err.Error())
+		return
+	}
+
+	response := map[string]interface{}{
+		"success": true,
+		"message": "Fetched job details",
+		"data":    data,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func (ac *AdminController) GetUsers(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.WrongMethod(w)
+		return
+	}
 
+	users, err := ac.service.GetAllUsers()
+	if err != nil {
+		utils.InternalServerError(w, err.Error())
+		return
+	}
+
+	response := map[string]interface{}{
+		"success": false,
+		"message": "Fetched All Users Data Successfully",
+		"data":    users,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func (ac *AdminController) ApplicantData(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.WrongMethod(w)
+		return
+	}
 
+	userIdStr := r.PathValue("applicant_id")
+	if userIdStr == "" {
+		utils.InvalidInput(w, "applicant_id missing")
+		return
+	}
+
+	userId, err := strconv.Atoi(userIdStr)
+	if err != nil {
+		utils.InvalidInput(w, "invalid applicant_id format")
+		return
+	}
+
+	userData, profileData, err := ac.service.ApplicantData(userId)
+	if err != nil {
+		utils.InternalServerError(w, err.Error())
+		return
+	}
+
+	response := map[string]interface{}{
+		"success": true,
+		"message": "Fetched Applicant Details",
+		"data": map[string]interface{}{
+			"user":    userData,
+			"profile": profileData,
+		},
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(response)
 }
