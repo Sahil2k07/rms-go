@@ -25,7 +25,7 @@ func (q *UserQueries) CheckExistingUser(email string) (string, error) {
 	err := q.db.QueryRow(query, email).Scan(&existingEmail)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return "", err
+			return "", nil
 		}
 
 		return "", err

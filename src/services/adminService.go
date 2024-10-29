@@ -9,3 +9,12 @@ type AdminService struct {
 func NewAdminService(queries *queries.AdminQueries) *AdminService {
 	return &AdminService{queries: queries}
 }
+
+func (as *AdminService) CreateJobPost(id int, title, description, companyName string) (int64, error) {
+	jobId, err := as.queries.CreateNewJob(title, description, companyName, id)
+	if err != nil {
+		return 0, err
+	}
+
+	return jobId, nil
+}

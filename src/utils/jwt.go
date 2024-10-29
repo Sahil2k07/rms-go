@@ -54,10 +54,15 @@ func ValidateJWT(tokenString string) (int, string, string, error) {
 			}
 		}
 
-		id, _ := claims["id"].(int)
-		email, _ := claims["email"].(string)
-		userType, _ := claims["userType"].(string)
+		idFloat, idOk := claims["id"].(float64)
+		email, emailOk := claims["email"].(string)
+		userType, userTypeOk := claims["userType"].(string)
 
+		if !idOk || !emailOk || !userTypeOk {
+			return 0, "", "", errors.New("invalid token claims")
+		}
+
+		id := int(idFloat)
 		return id, email, userType, nil
 	}
 
